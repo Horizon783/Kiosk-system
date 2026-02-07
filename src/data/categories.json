@@ -1,0 +1,5 @@
+[
+  { "id": "burgers", "name": "Burgers", "displayOrder": 1 },
+  { "id": "sides", "name": "Sides", "displayOrder": 2 },
+  { "id": "drinks", "name": "Drinks", "displayOrder": 3 }
+]
