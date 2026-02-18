@@ -8,7 +8,7 @@ function App() {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [cartItems, setCartItems] = useState([]);
   /* 
-  cartItems is an array if objects with the following structure:
+  cartItems is an array of objects with the following structure:
    {
      itemId, quantity
    }
