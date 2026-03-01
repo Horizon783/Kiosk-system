@@ -10,11 +10,12 @@ function App() {
   /* 
   cartItems is an array of objects with the following structure:
    {
+
      itemId, quantity
    }
   */
 
-  function handleAddToCart(itemId){
+  function handleAddToCart(itemId, option="+"){
     setCartItems(prevItems => {
       // console.log(`Adding item with id ${itemId} to cart called state-setter`);
       // console.log(prevItems);
@@ -23,9 +24,21 @@ function App() {
       // if item already exists in cart, increase quantity
       if(existingItem){
         // can remove {} from map and it will implicily return the object
+        if(option === "-"){
+          // if quantity is 1 and we want to decrease it, we remove the item from cart
+          let quantity = existingItem.quantity;
+          if(quantity === 1){
+            return prevItems.filter(item => item.itemId !== itemId);
+          }
+          // else we decrease the quantity by 1
+          return prevItems.map(item => item.itemId === itemId ? {...item, quantity: quantity -1}: item);
+        }
+
         return prevItems.map(item => 
           item.itemId === itemId ? {...item, quantity: item.quantity + 1}: item
         )
+
+        
       }
       // if item does not exist in cart, add it with quantity 1
       return [...prevItems, {itemId, quantity: 1}];
@@ -45,7 +58,7 @@ function App() {
 
       <aside className="sidebar right" >
         <h3>Cart Items</h3>
-        <Cart cartItems={cartItems}/>
+        <Cart cartItems={cartItems} setQuantity={handleAddToCart}/>
       </aside>
       
     </div>

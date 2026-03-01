@@ -1,6 +1,8 @@
- import menu from '../data/menu.json';
+// import menu from '../data/menu.json';
+import newMenu from '../data/new_menu.js';
 
-function Cart({cartItems}){
+
+function Cart({cartItems, setQuantity}){
     // console.log(`printing cartItems before display:`, cartItems);
     /* cartItems is a state variable in App.jsx which is an array of objects with following structure:
     {
@@ -20,8 +22,8 @@ function Cart({cartItems}){
     */
 
     const total = cartItems.reduce((sum, CartItem)=>{
-        const menuItem = menu.find(Item => Item.id === CartItem.itemId);
-        return sum + menuItem.price * CartItem.quantity;
+        let id = CartItem.itemId;
+        return sum + newMenu[id].price * CartItem.quantity;
     },0);
     
     return (
@@ -32,9 +34,12 @@ function Cart({cartItems}){
         <ul>
             {
                 cartItems.map(item => {
-                    const menuItem = menu.find(menuItem => menuItem.id === item.itemId);
+                    // const menuItem = menu.item.itemId;
+                    let id = item.itemId;
                     return <li key={item.itemId}>
-                        {menuItem.name} x {item.quantity}
+                        {newMenu[id].name} x {item.quantity}
+                        <button onClick={()=> setQuantity(id)}>Plus</button>
+                        <button onClick={()=> setQuantity(id,"-")}>Minus</button>
                     </li>
                     
                 })
