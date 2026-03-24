@@ -2,7 +2,7 @@
 import newMenu from '../data/new_menu.js';
 
 
-function Cart({cartItems, setQuantity}){
+function Cart({cartItems, setQuantity, onPlaceOrder}){
     // console.log(`printing cartItems before display:`, cartItems);
     /* cartItems is a state variable in App.jsx which is an array of objects with following structure:
     {
@@ -38,14 +38,16 @@ function Cart({cartItems, setQuantity}){
                     let id = item.itemId;
                     return <li key={item.itemId}>
                         {newMenu[id].name} x {item.quantity}
-                        <button onClick={()=> setQuantity(id)}>Plus</button>
-                        <button onClick={()=> setQuantity(id,"-")}>Minus</button>
+                        <button onClick={()=> setQuantity(id)}>+</button>
+                        <button onClick={()=> setQuantity(id,"-")}>-</button>
+                        <button onClick={()=> setQuantity(id,"remove")}>Remove</button>
                     </li>
                     
                 })
             }
             <hr />
             <h3>{`Total: Rs ${total}`}</h3>
+            <button onClick={onPlaceOrder}>Place Order</button>
         </ul>
     );
 }
