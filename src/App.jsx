@@ -3,6 +3,7 @@ import './App.css';
 import CategoryList from "./components/CategoryList.jsx";
 import { useEffect, useState } from "react";
 import Cart from "./components/Cart.jsx";
+import newMenu from "./data/new_menu.js";
 
 function App() {
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -25,9 +26,14 @@ function App() {
 
    function handlePlaceOrder(){
     console.log("order placed",cartItems);
+    const total = cartItems.reduce((sum, item)=>{
+      return sum + newMenu[item.itemId].price*item.quantity;
+    },0);
+
     const newOrder = {
       id: Date.now(),
       items: cartItems,
+      total,
       timeStamp: new Date().toLocaleString()
     };
     
@@ -76,16 +82,21 @@ function App() {
 }
 
 useEffect(()=>{
-  // localStorage.setItem("cartItems", JSON.stringify(cartItems));
+  
   localStorage.setItem("cartItems", JSON.stringify(cartItems));
-  localStorage.setItem("orderHistory", JSON.stringify(orderHistory));
-},[cartItems,orderHistory]);
+},[cartItems]);
+
+useEffect(()=>{
+
+    localStorage.setItem("orderHistory", JSON.stringify(orderHistory));
+},[orderHistory]);
 
 
 
   return (
     <div className="dashboard">
       <aside className="sidebar left" >
+
         <h3>Categories</h3>
         <CategoryList onSelectCategory={setSelectedCategory} selectedCategory={selectedCategory}/>
       </aside>
@@ -94,6 +105,19 @@ useEffect(()=>{
           { orderPlaced ? (
             <div>
               <h2>Order Confirmed! 🎉</h2> 
+              {orderHistory.length > 0 && (
+                <div>
+                  <h3>Last Order Summary</h3>
+                  {
+                    orderHistory[orderHistory.length -1].items.map(item =>(
+                      <p key={item.itemId}>
+                        {newMenu[item.itemId].name} x {item.quantity}
+                      </p>
+                    ))
+                  }
+                  <h4>Total: ₹{orderHistory[orderHistory.length -1].total}</h4>
+                </div>
+              )}
               <button onClick={()=>setOrderPlaced(false)}>New Order </button>
             </div>
           )
@@ -106,11 +130,12 @@ useEffect(()=>{
         <Cart cartItems={cartItems} setQuantity={handleAddToCart} onPlaceOrder={handlePlaceOrder} />
       </aside>
 
-      <h3>Order History</h3>
       <ul>
+        <h3>Order History</h3>
         {orderHistory.map(order =>(
           <li key={order.id}>
             Order at {order.timeStamp}
+           
           </li>
         ))}
       </ul>

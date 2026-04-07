@@ -12,7 +12,7 @@ function MenuGrid({selectedCategory , onAddToCart}){
                 <div key={item.id}>
                     <strong>{item.name}</strong> ₹{item.price}  
                     {/* <span>{item.categoryId}</span> */}
-                    <button onClick={()=> onAddToCart(item.id)}>
+                    <button onClick={()=>  onAddToCart(item.id)}>
                         Add
                     </button>
                 </div>
